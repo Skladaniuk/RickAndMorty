@@ -13,18 +13,18 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
+      
       <v-divider></v-divider>
-
+      
       <v-list nav dense>
         <v-list-item-group active-class="deep-purple--text text--accent-4">
-
-          <v-list-item v-for="element in sidebarElements" :key="element.id">
+          
+          <v-list-item v-for="element in sidebarElements" :key="element.id" class='sidebar-nav-item'>
             <v-list-item-title>
               <router-link :to="{name: element.name}">{{element.title}}</router-link>
             </v-list-item-title>
           </v-list-item>
-
+        
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -33,7 +33,7 @@
 
 <script>
   export default {
-    name: "Sidebar",
+    name: 'Sidebar',
     data() {
       return {
         showSidebar: true,
@@ -41,29 +41,36 @@
           {
             title: 'Overview',
             name: 'OverviewPage',
-            id: 1,
+            id: 1
           },
           {
             title: 'Characters',
             name: 'CharactersPage',
-            id: 2,
+            id: 2
           },
           {
             title: 'Locations',
             name: 'LocationsPage',
-            id: 3,
+            id: 3
           },
           {
             title: 'Episodes',
             name: 'EpisodesPage',
-            id: 4,
+            id: 4
           }
-        ],
+        ]
       }
     }
   }
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 
+  .sidebar-nav-item a {
+    color: #000;
+    font-size: 18px;
+    text-decoration: none;
+    display: block;
+  }
+  
 </style>

@@ -26,10 +26,34 @@
 
 <script>
   export default {
-    name: "CharacterItem"
+    name: "CharacterCart",
+    props: {
+      character: {
+        type: Object,
+        required: true,
+      },
+    },
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .list-item-card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 
+  .list-item-wrap {
+    display: flex;
+    padding: 0;
+  }
+
+  .avatar {
+    min-width: 200px !important;
+    min-height: 200px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 </style>
