@@ -1,11 +1,15 @@
 <template>
-  <v-app>
+  <v-main>
     <router-view />
-  </v-app>
+  </v-main>
 </template>
 
 <script>
   export default {
-    name: 'App'
+    name: 'AuthLayout'
   }
 </script>
+
+<style scoped>
+
+</style>

@@ -8,7 +8,7 @@
     <v-navigation-drawer app v-model="showSidebar">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="text-h6">
+          <v-list-item-title class="text-h5">
             Rick and Morty App
           </v-list-item-title>
         </v-list-item-content>
@@ -70,7 +70,9 @@
     color: #000;
     font-size: 18px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
   }
   
 </style>
