@@ -1,32 +1,32 @@
 <template>
-  <v-footer class='pa-0' app>
+  <v-footer class='footer pa-0' app>
     <ul class='footer-nav'>
-      <li>Characters: {{charactersNumber}}</li>
-      <li>Episodes: {{episodesNumber}}</li>
-      <li>Locations: {{locationsNumber}}</li>
+      <li
+        v-for='item in allCount'
+        :key='item.count'
+      >
+        {{item.text}}: {{item.count}}
+      </li>
     </ul>
   </v-footer>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+  
   export default {
-    name: 'Footer',
-    props: {
-      charactersNumber: {
-        type: Number,
-      },
-      episodesNumber: {
-        type: Number,
-      },
-      locationsNumber: {
-        type: Number,
-      }
+    name: 'FooterComponent',
+    computed: {
+      ...mapState(['allCount'])
     }
   }
 </script>
 
 <style scoped lang='scss'>
-
+  .footer {
+    z-index: 7;
+  }
+  
   .footer-nav {
     background-color: rgb(32, 35, 41);
     display: flex;
@@ -38,7 +38,7 @@
     li:not(:last-child) {
       margin-right: 20px;
     }
-  
+    
     li {
       color: rgb(158, 158, 158);
       text-transform: uppercase;
@@ -46,5 +46,5 @@
       font-weight: 700;
     }
   }
-  
+
 </style>

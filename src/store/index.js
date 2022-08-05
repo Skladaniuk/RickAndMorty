@@ -8,10 +8,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    allCount: []
   },
   getters: {
   },
   mutations: {
+    SET_ALL_COUNT: (state, count) => {
+      if (state.allCount.length < 3) {
+        state.allCount.push(count)
+      }
+    }
   },
   actions: {
   },

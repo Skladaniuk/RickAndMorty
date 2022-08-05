@@ -14,36 +14,42 @@
         ></path>
       </svg>
     </div>
-    
-    <CartList :cartsData="characters" />
+    <div>
+      <v-row v-if='!tenRandomCharacters.length'>
+        <v-col
+          v-for='i in 12'
+          :key='i'
+          md='6'
+          sm='12'
+          class='mb-10'
+        >
+          <v-skeleton-loader
+            type="list-item-avatar, card-heading, list-item-three-line"
+          ></v-skeleton-loader>
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col
+          v-for="character in tenRandomCharacters"
+          :key="character.id"
+          md='6'
+          sm='12'
+        >
+          <CharacterCart :character='character' />
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
-  import CartList from '@/components/CartsList'
+  import {mapState} from 'vuex'
+  import CharacterCart from '@/components/carts/CharacterCart'
   
   export default {
     name: 'OverviewPage',
-    data() {
-      return {
-        characters: []
-      }
-    },
-    components: {
-      CartList
-    },
-    computed: {
-      ...mapState('charactersStore', ['tenRandomCharacters'])
-    },
-    async created() {
-      await this.getCharacters()
-      await this.getTenRandomCharacters()
-      this.characters = this.tenRandomCharacters
-    },
-    methods: {
-      ...mapActions('charactersStore', ['getCharacters', 'getTenRandomCharacters'])
-    }
+    components: {CharacterCart},
+    computed: mapState('charactersStore', ['tenRandomCharacters'])
   }
 </script>
 
