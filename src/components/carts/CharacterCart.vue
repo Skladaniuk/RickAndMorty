@@ -1,70 +1,142 @@
 <template>
-  <v-card class="list-item-card">
-    <v-list-item three-line class="list-item-wrap">
-      <router-link :to='{name: "SingleCharacterPage", params: {characterId: character.id}}'>
-        <v-list-item-avatar tile size="80" color="grey" class="avatar ma-0 mr-3">
-          <img :src="character.image">
-        </v-list-item-avatar>
+  <v-card>
+    <v-list-item class='flex-column flex-sm-row d-flex pa-0'>
+      <router-link :to='{name: "SingleCharacterPage", params: {characterId: character.id}}' class='avatar'>
+        <div class='ma-0 d-flex'>
+          <img :src='character.image' width='100%'>
+        </div>
       </router-link>
-      
-      <v-list-item-content class="content">
-        <router-link :to='{name: "SingleCharacterPage", params: {characterId: character.id}}'>
-          <v-list-item-title class="text-h5 mb-1 item-name">{{character.name}}</v-list-item-title>
+
+      <v-list-item-content class='px-5'>
+        <router-link
+          :to='{name: "SingleCharacterPage", params: {characterId: character.id}}'
+          class='title font-weight-bold text-decoration-none indigo--text mb-2'
+        >
+          <span class='text-h4 text-sm-h5 mb-2'>{{ character.name }}</span>
         </router-link>
-        <div class="item-in-life">
-          <span>{{character.status}} - {{character.species}}</span>
+        <div class='d-flex'>
+          <v-icon
+            :color='checkLifeCharacter'
+            class='mr-1'
+            size='10'
+          >
+            mdi-brightness-1
+          </v-icon>
+          <span class='is-live'>{{ character.status }} - {{ character.species }}</span>
         </div>
-        <div class="item-info">
-          <v-list-item-subtitle>Last known location:</v-list-item-subtitle>
-          <router-link :to='{name: "SingleLocationPage", params: {locationId: getLocationId(character.location.url)}}'>
-            <span>{{character.location.name}}</span>
+        <div class='mt-3'>
+          <span class='grey--text mr-2'>Last known location:</span>
+          <router-link
+            v-if='character.location.url'
+            :to='{name: "SingleLocationPage", params: {locationId: getLocationId(character.location.url)}}'
+          >
+            <span>{{ character.location.name }}</span>
           </router-link>
+          <span v-else>{{ character.location.name }}</span>
         </div>
-<!--        <div class="item-info">-->
-<!--          <v-list-item-subtitle>First seen in:</v-list-item-subtitle>-->
-<!--          <span></span>-->
-<!--        </div>-->
       </v-list-item-content>
+      <v-btn
+        :color='likeColor'
+        class='like-btn'
+        icon
+        @click='evaluateCharacter'
+      >
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
     </v-list-item>
   </v-card>
 </template>
 
 <script>
-  
-  export default {
-    name: 'CharacterCart',
-    props: {
-      character: {
-        type: Object,
-        required: true
+import { mapGetters, mapMutations } from 'vuex'
+
+export default {
+  name: 'CharacterCart',
+  props: {
+    character: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      likeColor: '',
+      lifeIndicator: ''
+    }
+  },
+  computed: {
+    ...mapGetters('authStore', ['isLogged']),
+    checkLifeCharacter() {
+      switch (this.character.status) {
+        case 'Alive':
+          return 'green'
+          break
+        case 'Dead':
+          return 'red'
+          break
+        default:
+          return 'grey'
+      }
+    }
+  },
+  created() {
+    this.likedCharacter()
+  },
+  methods: {
+    ...mapMutations({
+      LIKE_CHARACTER: 'charactersStore/LIKE_CHARACTER',
+      DISLIKE_CHARACTER: 'charactersStore/DISLIKE_CHARACTER',
+      SET_SNACKBAR_PARAMS: 'snackbarStore/SET_SNACKBAR_PARAMS'
+    }),
+    getLocationId(locationUrl) {
+      return +locationUrl.split('/').pop()
+    },
+    evaluateCharacter() {
+      if (this.isLogged) {
+        this.character.isLiked = !this.character.isLiked
+        if (this.character.isLiked) {
+          this.LIKE_CHARACTER(this.character)
+          this.likedCharacter()
+        } else {
+          this.DISLIKE_CHARACTER(this.character.id)
+          this.likedCharacter()
+        }
+      } else {
+        this.SET_SNACKBAR_PARAMS({
+          isOpen: true,
+          message: 'Please log-in to like',
+          color: 'error'
+        })
       }
     },
-    methods: {
-      getLocationId(locationUrl) {
-        return +locationUrl.split("/")[locationUrl.split("/").length - 1]
-      }
+    likedCharacter() {
+      if (this.character.isLiked) this.likeColor = 'pink'
+      else this.likeColor = 'grey'
     }
   }
+}
 </script>
 
-<style scoped lang="scss">
-  .list-item-card {
-    width: 100%;
-    margin-bottom: 20px;
+<style lang='scss' scoped>
+
+.avatar {
+  max-width: unset;
+  width: 100%;
+  @media (min-width: 600px) {
+    max-width: 220px;
   }
-  
-  .list-item-wrap {
-    display: flex;
-    padding: 0;
+}
+.like-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 7px;
+  background-color: #fff;
+  @media (min-width: 600px) {
+    position: relative;
   }
-  
-  .avatar {
-    min-width: 200px !important;
-    min-height: 200px;
-    
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
+}
+.title:hover {
+  text-decoration: underline !important;
+}
 </style>

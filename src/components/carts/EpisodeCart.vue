@@ -1,44 +1,80 @@
 <template>
-  <v-card class="list-item-card">
-    <v-list-item three-line class="list-item-wrap">
-      
-      <v-list-item-content class="content">
-        <router-link :to='{name: "SingleEpisodePage", params: {episodeId: episode.id}}'>
-          <v-list-item-title class="text-h5 mb-1 item-name">{{episode.name}}</v-list-item-title>
+  <v-card>
+    <v-list-item>
+      <v-list-item-content class='content'>
+        <router-link
+          :to='{name: "SingleEpisodePage", params: {episodeId: episode.id}}'
+          class='title text-decoration-none indigo--text mb-2'
+        >
+          <span class='text-h5 mb-3'>{{ episode.name }}</span>
         </router-link>
-        <div class="item-info">
+        <div class='mb-2'>
           <v-list-item-subtitle>Air Date:</v-list-item-subtitle>
-          <span>{{episode.air_date}}</span>
+          <span>{{ episode.air_date }}</span>
         </div>
-        <div class="item-info">
+        <div>
           <v-list-item-subtitle>Episode ID:</v-list-item-subtitle>
-          <span>{{episode.episode}}</span>
+          <span>{{ episode.episode }}</span>
         </div>
       </v-list-item-content>
+      <v-btn
+        v-if='isLogged'
+        :color='color'
+        icon
+        @click='evaluateEpisode'
+      >
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
     </v-list-item>
   </v-card>
 </template>
 
 <script>
-  export default {
-    name: 'EpisodeCart',
-    props: {
-      episode: {
-        type: Object
+import { mapGetters, mapMutations } from 'vuex'
+
+export default {
+  name: 'EpisodeCart',
+  props: {
+    episode: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      color: ''
+    }
+  },
+  computed: {
+    ...mapGetters('authStore', ['isLogged'])
+  },
+  created() {
+    this.likedEpisode()
+  },
+  methods: {
+    ...mapMutations({
+      LIKE_EPISODE: 'episodesStore/LIKE_EPISODE',
+      DISLIKE_EPISODE: 'episodesStore/DISLIKE_EPISODE'
+    }),
+    evaluateEpisode() {
+      this.episode.isLiked = !this.episode.isLiked
+      if (this.episode.isLiked) {
+        this.LIKE_EPISODE(this.episode)
+        this.likedEpisode()
+      } else {
+        this.DISLIKE_EPISODE(this.episode.id)
+        this.likedEpisode()
       }
+    },
+    likedEpisode() {
+      if (this.episode.isLiked) this.color = 'pink'
+      else this.color = 'grey'
     }
   }
+}
 </script>
 
-<style scoped>
-  
-  .list-item-card {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  
-  .list-item-wrap {
-    display: flex;
-  }
-
+<style lang='scss' scoped>
+.title:hover {
+  text-decoration: underline !important;
+}
 </style>

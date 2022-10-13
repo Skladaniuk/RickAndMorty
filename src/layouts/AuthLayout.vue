@@ -1,13 +1,18 @@
 <template>
   <v-main>
-    <router-view />
+    <transition
+      mode='out-in'
+      name='fade'
+    >
+      <router-view/>
+    </transition>
   </v-main>
 </template>
 
 <script>
-  export default {
-    name: 'AuthLayout'
-  }
+export default {
+  name: 'AuthLayout'
+}
 </script>
 
 <style scoped>
