@@ -254,8 +254,7 @@ export default {
   },
   computed: {
     ...mapState({
-      allUsers: state => state.authStore.allUsers,
-      statusMessage: state => state.authStore.statusMessage
+      allUsers: state => state.authStore.allUsers
     }),
     ...mapGetters({
       checkIfRegistered: 'authStore/checkIfRegistered'
@@ -274,20 +273,20 @@ export default {
         // this.ADD_USER(this.newUser)
         await this.registerTheUser(this.newUser)
 
-        switch(this.statusMessage.status) {
-          case 200:
-            this.alertColor = 'success'
-            break
-          case 404:
-            this.alertColor = 'error'
-            break
-        }
-
-        this.SET_SNACKBAR_PARAMS({
-          isOpen: true,
-          message: this.statusMessage.data.message,
-          color: this.alertColor
-        })
+        // switch(this.statusMessage.status) {
+        //   case 200:
+        //     this.alertColor = 'success'
+        //     break
+        //   case 404:
+        //     this.alertColor = 'error'
+        //     break
+        // }
+        //
+        // this.SET_SNACKBAR_PARAMS({
+        //   isOpen: true,
+        //   message: this.statusMessage.data.message,
+        //   color: this.alertColor
+        // })
       }
     }
   }

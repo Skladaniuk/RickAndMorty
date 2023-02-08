@@ -10,7 +10,7 @@ export default {
   getters: {
     findUser: state => user => state.allUsers.find(el => el.email === user.email && el.password === user.password),
     checkIfRegistered: state => user => state.allUsers.some(el => el.email === user.email),
-    isLogged: state => Object.keys(state.currentUser).length
+    isLogged: state => !!Object.keys(state.currentUser).length
   },
   mutations: {
     ADD_USER: (state, user) => state.allUsers.push(user),
@@ -40,8 +40,7 @@ export default {
   actions: {
     async registerTheUser({commit}, data) {
       try {
-        const res = await axios.post('http://localhost:8081/api/register', data)
-        commit('SET_RESPONSE_MESSAGE', res)
+        await axios.post('http://localhost:8081/api/register', data)
         await this.$router.push({ name: 'LoginPage' })
       } catch (error) {
         commit('SET_RESPONSE_MESSAGE', error.response)
@@ -50,12 +49,10 @@ export default {
     async loginTheUser({commit}, data) {
       try {
         const res = await axios.post('http://localhost:8081/api/login', data)
-        commit('SET_RESPONSE_MESSAGE', res)
+        commit('SET_CURRENT_USER', res.data.response)
         await this.$router.push({ name: 'OverviewPage' })
-        console.log(res)
       } catch (error) {
         commit('SET_RESPONSE_MESSAGE', error.response)
-        console.log(error.response)
       }
     }
   }

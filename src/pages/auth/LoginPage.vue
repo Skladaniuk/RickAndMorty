@@ -111,9 +111,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      statusMessage: state => state.authStore.statusMessage
-    }),
     ...mapGetters({
       findUser: 'authStore/findUser'
     })
@@ -131,20 +128,20 @@ export default {
         // this.SET_CURRENT_USER(this.findUser(this.user))
         await this.loginTheUser(this.user)
 
-        switch(this.statusMessage.status) {
-          case 200:
-            this.alertColor = 'success'
-            break
-          case 404:
-            this.alertColor = 'error'
-            break
-        }
-
-        this.SET_SNACKBAR_PARAMS({
-          isOpen: true,
-          message: this.statusMessage.data.message,
-          color: this.alertColor
-        })
+        // switch(this.statusMessage.status) {
+        //   case 200:
+        //     this.alertColor = 'success'
+        //     break
+        //   case 404:
+        //     this.alertColor = 'error'
+        //     break
+        // }
+        //
+        // this.SET_SNACKBAR_PARAMS({
+        //   isOpen: true,
+        //   message: this.statusMessage.data.message,
+        //   color: this.alertColor
+        // })
       }
     }
   }
